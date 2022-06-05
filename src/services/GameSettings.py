@@ -8,3 +8,5 @@ class GameSettings:
     RADIUS = int(ELEMENT_SIZE / 2 - 5)
     ROW = 6
     COLUMN = 7
+    WIDTH = ELEMENT_SIZE * COLUMN
+    HEIGHT = ELEMENT_SIZE * (ROW+1)

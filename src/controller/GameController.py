@@ -46,12 +46,12 @@ class GameController:
     def play_game(self):
         game_over = False
         turn = 0
-        self.draw_pitch()
 
         while not game_over:
-
+            self.draw_pitch()
             for event in pygame.event.get():
-                if event.type == pygame.quit():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
                     sys.exit()
 
                 if event.type == pygame.MOUSEMOTION:

@@ -33,9 +33,10 @@ class PitchView:
             # pygame.draw.circle(self.screen, gs.PLAYER_ONE_COLOR, (pos_x, int(gs.ELEMENT_SIZE / 2)),
             #                    gs.RADIUS)
         else:
-            self.draw_circle(pos_x, 0, gs.PLAYER_TWO_COLOR)
+            self.draw_motion_circle(pos_x, gs.PLAYER_TWO_COLOR)
             # pygame.draw.circle(self.screen, gs.PLAYER_TWO_COLOR, (pos_x, int(gs.ELEMENT_SIZE / 2)),
             #                   gs.RADIUS)
+        pygame.display.update()
 
     def draw_rect(self, col, row, color):
         pygame.draw.rect(self.screen, color,
@@ -50,3 +51,4 @@ class PitchView:
     def draw_motion_circle(self, pos_x, color):
         pygame.draw.circle(self.screen, color, (pos_x, int(gs.ELEMENT_SIZE / 2)),
                            gs.RADIUS)
+        pygame.display.update()

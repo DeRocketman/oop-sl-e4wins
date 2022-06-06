@@ -52,6 +52,5 @@ class PitchView:
         pygame.draw.rect(self.screen, gs.EMPTY_SLOT_COLOR, (0, 0, gs.WIDTH, gs.ELEMENT_SIZE))
         pygame.draw.circle(self.screen, color, (pos_x, int(gs.ELEMENT_SIZE / 2)),
                            gs.RADIUS)
-        pygame.display.update()
 
 

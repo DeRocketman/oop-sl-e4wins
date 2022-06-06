@@ -44,8 +44,6 @@ class GameController:
                     pos_x = event.pos[0]
                     self.pitch_view.draw_coin(pos_x)
 
-                pygame.display.update()
-
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pygame.draw.rect(self.pitch_view.screen, gs.EMPTY_SLOT_COLOR, (0, 0, gs.WIDTH, gs.ELEMENT_SIZE))
 

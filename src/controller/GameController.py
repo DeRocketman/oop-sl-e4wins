@@ -41,8 +41,8 @@ class GameController:
                     sys.exit()
 
                 if event.type == pygame.MOUSEMOTION:
-                    posx = event.pos[0]
-                    self.pitch_view.draw_coin(posx)
+                    pos_x = event.pos[0]
+                    self.pitch_view.draw_coin(pos_x)
 
                 pygame.display.update()
 
@@ -50,8 +50,8 @@ class GameController:
                     pygame.draw.rect(self.pitch_view.screen, gs.EMPTY_SLOT_COLOR, (0, 0, gs.WIDTH, gs.ELEMENT_SIZE))
 
                     if turn == 0:
-                        posx = event.pos[0]
-                        col = int(math.floor(posx / gs.ELEMENT_SIZE))
+                        pos_x = event.pos[0]
+                        col = int(math.floor(pos_x / gs.ELEMENT_SIZE))
 
                         if self.is_valid_move(col):
                             row = self.get_next_open_row(col)

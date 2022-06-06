@@ -24,10 +24,7 @@ class PitchView:
 
         pygame.display.update()
 
-    def draw_coin(self, pos_x):
-
-        # self.draw_rect(pos_x, 0, gs.EMPTY_SLOT_COLOR)
-        turn = 0
+    def draw_coin(self, pos_x, turn):
         if turn == 0:
             self.draw_motion_circle(pos_x, gs.PLAYER_ONE_COLOR)
         else:

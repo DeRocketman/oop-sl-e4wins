@@ -26,7 +26,7 @@ class PitchView:
 
     def draw_coin(self, posx):
         # pygame.draw.rect(self.screen, gs.EMPTY_SLOT_COLOR, (0, 0, gs.WIDTH, gs.ELEMENT_SIZE))
-        self.draw_rect(0, 0, gs.EMPTY_SLOT_COLOR)
+        self.draw_rect(posx, 0, gs.EMPTY_SLOT_COLOR)
         turn = 0
         if turn == 0:
             self.draw_circle(posx, 0, gs.PLAYER_ONE_COLOR)

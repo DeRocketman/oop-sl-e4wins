@@ -1,3 +1,4 @@
+import math
 import sys
 
 import numpy
@@ -17,53 +18,51 @@ class GameController:
     def build_pitch(row, column):
         return numpy.zeros((row, column))
 
-    def draw_pitch(self):
-        for col in range(gs.COLUMN):
-            for row in range(gs.ROW):
-                pygame.draw.rect(self.screen, gs.PITCH_COLOR,
-                                 (col * gs.ELEMENT_SIZE, row * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE, gs.ELEMENT_SIZE,
-                                  gs.ELEMENT_SIZE))
-                pygame.draw.circle(self.screen, gs.EMPTY_SLOT_COLOR, (int(col * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE / 2),
-                                                                      int(row * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE +
-                                                                          gs.ELEMENT_SIZE / 2)), gs.RADIUS)
-
-        for col in range(gs.COLUMN):
-            for row in range(gs.ROW):
-                if self.pitch[row][col] == 1:
-                    pygame.draw.circle(self.screen, gs.PLAYER_ONE_COLOR, (
-                        int(col * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE / 2),
-                        700 - int(row * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE / 2)),
-                                       gs.RADIUS)
-                elif self.pitch[row][col] == 2:
-                    pygame.draw.circle(self.screen, gs.PLAYER_TWO_COLOR, (
-                        int(col * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE / 2),
-                        700 - int(row * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE / 2)), gs.RADIUS)
-        pygame.display.update()
-
     def throw_coin(self, row, col, coin):
         self.pitch[row][col] = coin
+
+    def is_valid_move(self, col):
+        return self.pitch_view.pitch[gs.ROW - 1][col] == 0
+
+    def get_next_open_row(self, col):
+        for row in range(gs.ROW):
+            if self.pitch_view.pitch[row][col] == 0:
+                return row
 
     def play_game(self):
         game_over = False
         turn = 0
 
         while not game_over:
-            self.draw_pitch()
+            self.pitch_view.draw_pitch()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
 
                 if event.type == pygame.MOUSEMOTION:
-                    pygame.draw.rect(self.screen, gs.EMPTY_SLOT_COLOR, (0, 0, gs.WIDTH, gs.ELEMENT_SIZE))
                     posx = event.pos[0]
+                    self.pitch_view.draw_coin(posx)
+
+                pygame.display.update()
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pygame.draw.rect(self.pitch_view.screen, gs.EMPTY_SLOT_COLOR, (0, 0, gs.WIDTH, gs.ELEMENT_SIZE))
+
                     if turn == 0:
-                        pygame.draw.circle(self.screen, gs.PLAYER_ONE_COLOR, (posx, int(gs.ELEMENT_SIZE / 2)),
-                                           gs.RADIUS)
-                    else:
-                        pygame.draw.circle(self.screen, gs.PLAYER_TWO_COLOR, (posx, int(gs.ELEMENT_SIZE / 2)),
-                                           gs.RADIUS)
-            pygame.display.update()
+                        posx = event.pos[0]
+                        col = int(math.floor(posx / gs.ELEMENT_SIZE))
+
+                        if self.is_valid_move(col):
+                            row = self.get_next_open_row(col)
+                            self.throw_coin(row, col, 1)
+
+                            # if winning_move(board, 1):
+                            #     label = myfont.render("Player 1 wins!!", 1, RED)
+                            #     screen.blit(label, (40, 10))
+                            #     game_over = True
+
+                self.pitch_view.draw_pitch()
 
 
 if __name__ == '__main__':

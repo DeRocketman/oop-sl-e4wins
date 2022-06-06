@@ -62,7 +62,7 @@ class GameController:
                             #     screen.blit(label, (40, 10))
                             #     game_over = True
 
-                self.pitch_view.draw_pitch()
+            self.pitch_view.draw_pitch()
 
 
 if __name__ == '__main__':

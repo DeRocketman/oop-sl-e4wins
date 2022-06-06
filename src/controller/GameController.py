@@ -5,21 +5,21 @@ import numpy
 import pygame
 
 from services.GameSettings import GameSettings as gs
+from view.PitchView import PitchView
 
 
 class GameController:
 
     def __init__(self):
         pygame.init()
-        self.pitch = self.build_pitch(gs.ROW, gs.COLUMN)
-        self.screen = pygame.display.set_mode(gs.PITCH_SIZE)
+        self.pitch_view = PitchView(self.build_pitch(gs.ROW, gs.COLUMN))
 
     @staticmethod
     def build_pitch(row, column):
         return numpy.zeros((row, column))
 
     def throw_coin(self, row, col, coin):
-        self.pitch[row][col] = coin
+        self.pitch_view.pitch[row][col] = coin
 
     def is_valid_move(self, col):
         return self.pitch_view.pitch[gs.ROW - 1][col] == 0

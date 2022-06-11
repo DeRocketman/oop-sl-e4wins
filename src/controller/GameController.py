@@ -2,6 +2,7 @@ import math
 import sys
 
 import numpy
+import numpy as np
 import pygame
 
 from services.GameSettings import GameSettings as gs
@@ -19,6 +20,8 @@ class GameController:
         return numpy.zeros((row, column))
 
     def throw_coin(self, row, col, coin):
+        print("DROPPIECE")
+        print("ROW ", row, "COL ", col)
         self.pitch_view.pitch[row][col] = coin
 
     def is_valid_move(self, col):
@@ -27,7 +30,11 @@ class GameController:
     def get_next_open_row(self, col):
         for row in range(gs.ROW):
             if self.pitch_view.pitch[row][col] == 0:
+                print("Reihe: ", row)
                 return row
+
+    def print_board_for_look(self):
+        print(np.flip(self.pitch_view.pitch, 0))
 
     def play_game(self):
         game_over = False
@@ -54,13 +61,14 @@ class GameController:
                         if self.is_valid_move(col):
                             row = self.get_next_open_row(col)
                             self.throw_coin(row, col, 1)
+                            self.print_board_for_look()
 
                             # if winning_move(board, 1):
                             #     label = myfont.render("Player 1 wins!!", 1, RED)
                             #     screen.blit(label, (40, 10))
                             #     game_over = True
 
-            self.pitch_view.draw_pitch()
+                        self.pitch_view.draw_pitch()
 
 
 if __name__ == '__main__':

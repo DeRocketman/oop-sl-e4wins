@@ -17,10 +17,19 @@ class PitchView:
 
         for col in range(gs.COLUMN):
             for row in range(gs.ROW):
+
                 if self.pitch[row][col] == 1:
-                    self.draw_circle(col, row, gs.PLAYER_ONE_COLOR)
+                    pygame.draw.circle(self.screen, gs.PLAYER_ONE_COLOR, (
+                        int(col * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE / 2),
+                        gs.HEIGHT - int(row * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE / 2)), gs.RADIUS)
+
                 elif self.pitch[row][col] == 2:
                     self.draw_circle(col, row, gs.PLAYER_TWO_COLOR)
+
+        #               if self.pitch[row][col] == 1:
+        #                   self.draw_circle(col, row, gs.PLAYER_ONE_COLOR)
+        #               elif self.pitch[row][col] == 2:
+        #                   self.draw_circle(col, row, gs.PLAYER_TWO_COLOR)
 
         pygame.display.update()
 

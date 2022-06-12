@@ -109,7 +109,6 @@ class GameController:
                 pygame.time.wait(3000)
 
 
-
 if __name__ == '__main__':
     gc = GameController()
     gc.play_game()

@@ -19,22 +19,14 @@ class PitchView:
             for row in range(gs.ROW):
 
                 if self.pitch[row][col] == 1:
-                    pygame.draw.circle(self.screen, gs.PLAYER_ONE_COLOR, (
-                        int(col * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE / 2),
-                        gs.HEIGHT - int(row * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE / 2)), gs.RADIUS)
+                    self.draw_pitch_circle(col, row, gs.PLAYER_ONE_COLOR)
 
                 elif self.pitch[row][col] == 2:
-                    self.draw_circle(col, row, gs.PLAYER_TWO_COLOR)
-
-        #               if self.pitch[row][col] == 1:
-        #                   self.draw_circle(col, row, gs.PLAYER_ONE_COLOR)
-        #               elif self.pitch[row][col] == 2:
-        #                   self.draw_circle(col, row, gs.PLAYER_TWO_COLOR)
-
+                    self.draw_pitch_circle(col, row, gs.PLAYER_TWO_COLOR)
         pygame.display.update()
 
-    def draw_coin(self, pos_x, turn):
-        if turn == 0:
+    def draw_coin(self, pos_x, current_player):
+        if current_player == 1:
             self.draw_motion_circle(pos_x, gs.PLAYER_ONE_COLOR)
         else:
             self.draw_motion_circle(pos_x, gs.PLAYER_TWO_COLOR)
@@ -54,3 +46,19 @@ class PitchView:
         pygame.draw.rect(self.screen, gs.EMPTY_SLOT_COLOR, (0, 0, gs.WIDTH, gs.ELEMENT_SIZE))
         pygame.draw.circle(self.screen, color, (pos_x, int(gs.ELEMENT_SIZE / 2)),
                            gs.RADIUS)
+
+    def draw_pitch_circle(self, col, row, color):
+        pygame.draw.circle(self.screen, color, (
+            int(col * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE / 2),
+            gs.HEIGHT - int(row * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE / 2)), gs.RADIUS)
+
+    def draw_win(self, current_player):
+        my_font = pygame.font.SysFont("monospace", 75)
+        if current_player == 1:
+            label = my_font.render("Spieler 1 gewinnt!!!111elf!", True, gs.PLAYER_ONE_COLOR)
+            print("PlayerOne wins")
+        else:
+            label = my_font.render("Spieler 2 gewinnt!!!!", True, gs.PLAYER_TWO_COLOR)
+            print("PlayerTwo wins")
+        self.screen.blit(label, (40, 10))
+        

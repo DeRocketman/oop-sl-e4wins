@@ -1,5 +1,4 @@
 import pygame
-import pygame_menu.events
 
 from model.Player import Player
 from view.MenuView import MenuView

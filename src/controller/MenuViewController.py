@@ -13,9 +13,7 @@ class MenuViewController:
         self.menu_view = MenuView(self)
         self.socket_client = SocketClient()
         self.socket_server = SocketServer()
-        self.ip_public = 'nur mit Windows'
-        # Funktioniert aktuell noch nicht mit MacOS!
-        #self.ip_public = get('https://api.ipfy.org').content.decode('utf8')
+        self.ip_public = get('https://api.ipify.org').content.decode('utf8')
         self.temp_server_ip = 'HALLOOOOOOOOOOOO MAX I BIMS'
 
     def start_game(self):

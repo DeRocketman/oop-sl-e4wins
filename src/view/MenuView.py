@@ -19,11 +19,12 @@ class MenuView:
 
         self.menu.mainloop(self.screen)
 
-    def draw_connect_player(self, is_host, ip):
+    def draw_connect_player(self, is_host, ip, public_ip):
         self.menu.close()
         self.reset_menu()
         if is_host:
-            self.menu.add.label(f'Deine IP: {ip}')
+            self.menu.add.label(f'Deine öffentlich. IP: {public_ip}')
+            self.menu.add.label(f'Deine lokale Netzwerk-IP: {ip}')
             self.menu.add.label('Teile diese IP deinem Spielpartner mit')
             self.menu.add.label('Warte auf Verbindung')
         else:

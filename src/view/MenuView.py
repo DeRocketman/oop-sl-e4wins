@@ -15,7 +15,7 @@ class MenuView:
                                  onchange=self.mvc.set_player_name)
         self.menu.add.selector('Spiel leiten / teilnehmen: ', [('\tteilnehmen\t', False), ('\tleiten\t', True)],
                                onchange=self.mvc.set_is_player_host)
-        self.menu.add.button('Weiter', onselect=self.mvc.show_connect_menu)
+        self.menu.add.button('Weiter').set_onselect(self.mvc.show_connect_menu)
 
         self.menu.mainloop(self.screen)
 

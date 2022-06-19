@@ -1,6 +1,8 @@
 import pygame
-
+import threading
 from model.Player import Player
+from services.SocketClient import SocketClient
+from services.SocketServer import SocketServer
 from view.MenuView import MenuView
 
 
@@ -9,6 +11,9 @@ class MenuViewController:
         pygame.init()
         self.player = Player()
         self.menu_view = MenuView(self)
+        self.socket_client = SocketClient()
+        self.socket_server = SocketServer()
+        self.temp_server_ip = 'HALLOOOOOOOOOOOO MAX I BIMS'
 
     def start_game(self):
         pass
@@ -27,7 +32,26 @@ class MenuViewController:
     def show_connect_menu(self):
         print(self.player.username)
         print(self.player.is_host)
-        print(self.player.ip)
+        if self.player.is_host:
+            self.socket_server.run_server()
+            self.socket_client.server_ip = self.socket_server.ip
+            if self.socket_client.connect() == 'connected':
+                print('Alles tutti')
+            else:
+                print('Verkackt!!! du ARSCHLOCH 1')
+        self.menu_view.draw_connect_player(self.player.is_host, self.socket_server.ip)
+
+    def set_temp_server_ip(self, value):
+        print(self.temp_server_ip)
+        self.temp_server_ip = value
+        print(self.temp_server_ip)
+
+    def connect_to_host(self):
+        self.socket_client.server_ip = self.temp_server_ip
+        if self.socket_client.connect() == 'connected':
+            print('Verbindung zustande gekommen')
+        else:
+            print('Verkackt!!! du ARSCHLOCH 2')
 
 
 if __name__ == '__main__':

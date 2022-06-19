@@ -10,3 +10,4 @@ class GameSettings:
     COLUMN = 7
     WIDTH = ELEMENT_SIZE * COLUMN
     HEIGHT = ELEMENT_SIZE * (ROW+1)
+    SERVERPORT = 6363

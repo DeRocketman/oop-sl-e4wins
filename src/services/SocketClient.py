@@ -18,7 +18,10 @@ class SocketClient:
 
     def send(self, msg):
         try:
-            self.client.send(str.encode(msg))
-            return self.client.recv(512).decode()
+            self.client.sendall(str.encode(msg))
         except socket.error as e:
             print('Error in message ', e)
+
+    def receive(self):
+        while True:
+            msg_decoded = self.client.recv(512).decode('utf-8')

@@ -20,7 +20,6 @@ class MenuView:
         self.menu.mainloop(self.screen)
 
     def draw_connect_player(self, is_host, ip, public_ip):
-        self.menu.close()
         self.reset_menu()
         if is_host:
             self.menu.add.label(f'Deine öffentlich. IP: {public_ip}')
@@ -33,5 +32,10 @@ class MenuView:
             self.menu.add.button('Verbinden').set_onselect(self.mvc.connect_to_host)
         self.menu.mainloop(self.screen)
 
+    def draw_pre_game(self):
+        self.reset_menu()
+
+
     def reset_menu(self):
+        self.menu.close()
         self.menu = pygame_menu.Menu('4WinsPy', 700, 700, theme=pygame_menu.themes.THEME_DEFAULT)

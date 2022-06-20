@@ -10,11 +10,12 @@ class MenuViewController:
     def __init__(self):
         pygame.init()
         self.player = Player()
+        self.opponent = Player()
         self.menu_view = MenuView(self)
         self.socket_client = SocketClient()
         self.socket_server = SocketServer()
         self.ip_public = get('https://api.ipify.org').content.decode('utf8')
-        self.temp_server_ip = 'HALLOOOOOOOOOOOO MAX I BIMS'
+        self.temp_server_ip = ''
 
     def start_game(self):
         pass
@@ -37,7 +38,7 @@ class MenuViewController:
             self.socket_server.run_server()
             self.socket_client.server_ip = self.socket_server.ip
             if self.socket_client.connect() == 'connected':
-                print('Alles tutti')
+                pass
             else:
                 print('Verkackt!!! du ARSCHLOCH 1')
 
@@ -51,9 +52,13 @@ class MenuViewController:
     def connect_to_host(self):
         self.socket_client.server_ip = self.temp_server_ip
         if self.socket_client.connect() == 'connected':
-            print('Verbindung zustande gekommen')
+            pass
+            # todo:
         else:
             print('Verkackt!!! du ARSCHLOCH 2')
+
+    def introduce_to_opponent(self):
+        self.socket_client.send(self.player.username)
 
 
 if __name__ == '__main__':

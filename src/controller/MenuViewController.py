@@ -53,7 +53,7 @@ class MenuViewController:
         self.socket_client.server_ip = self.temp_server_ip
         if self.socket_client.connect() == 'connected':
             pass
-            # todo:
+            # todo: introduce_to
         else:
             print('Verkackt!!! du ARSCHLOCH 2')
 

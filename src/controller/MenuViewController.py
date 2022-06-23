@@ -1,3 +1,5 @@
+from _thread import start_new_thread
+
 import pygame
 from requests import get
 from model.Player import Player
@@ -12,53 +14,64 @@ class MenuViewController:
         self.player = Player()
         self.opponent = Player()
         self.menu_view = MenuView(self)
-        self.socket_client = SocketClient()
+        self.socket_client = SocketClient(self)
         self.socket_server = SocketServer()
         self.ip_public = get('https://api.ipify.org').content.decode('utf8')
         self.temp_server_ip = ''
 
-    def start_game(self):
-        pass
+    def set_opponent_name(self, name):
+        if name != self.player.username:
+            self.opponent.username = name
 
     def set_player_name(self, value):
         self.player.username = value
 
     def set_is_player_host(self, value, is_player_host):
         self.player.is_host = is_player_host
-        print(is_player_host)
-        print(value)
+
+    def set_temp_server_ip(self, value):
+        self.temp_server_ip = value
 
     def show_menu(self):
         self.menu_view.draw_username_input()
 
-    def show_connect_menu(self):
-        print(self.player.username)
-        print(self.player.is_host)
+    def run_socket_server(self):
         if self.player.is_host:
             self.socket_server.run_server()
             self.socket_client.server_ip = self.socket_server.ip
-            if self.socket_client.connect() == 'connected':
-                pass
-            else:
-                print('Verkackt!!! du ARSCHLOCH 1')
+            self.socket_client.connect()
 
-        self.menu_view.draw_connect_player(self.player.is_host, self.socket_server.ip, self.ip_public)
+        else:
+            self.menu_view.draw_connect_player(self.player.is_host, self.socket_server.ip, self.ip_public, '')
 
-    def set_temp_server_ip(self, value):
-        print(self.temp_server_ip)
-        self.temp_server_ip = value
-        print(self.temp_server_ip)
+    def show_connect_menu(self, success):
+        label_text = None
+        if success:
+            label_text = 'Alles IO, warte auf Verbindung'
+        else:
+            label_text = 'Ups, da lief etwas schief\nbitte neustarten'
+        self.menu_view.draw_connect_player(self.player.is_host, self.socket_server.ip, self.ip_public, label_text)
 
     def connect_to_host(self):
         self.socket_client.server_ip = self.temp_server_ip
-        if self.socket_client.connect() == 'connected':
-            pass
-            # todo: introduce_to
-        else:
-            print('Verkackt!!! du ARSCHLOCH 2')
+        self.socket_client.connect()
 
     def introduce_to_opponent(self):
-        self.socket_client.send(self.player.username)
+        self.socket_client.send('username:'+self.player.username)
+
+    def start_game(self):
+        if self.opponent.username != '':
+            print('lets start the game')
+
+    def received_msg(self, msg):
+        print(msg)
+        if msg == 'host-connected':
+            self.show_connect_menu(True)
+        elif msg == 'player-joined':
+            self.introduce_to_opponent()
+        else:
+            self.set_opponent_name(msg)
+            self.start_game()
 
 
 if __name__ == '__main__':

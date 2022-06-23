@@ -15,17 +15,17 @@ class MenuView:
                                  onchange=self.mvc.set_player_name)
         self.menu.add.selector('Spiel leiten / teilnehmen: ', [('\tteilnehmen\t', False), ('\tleiten\t', True)],
                                onchange=self.mvc.set_is_player_host)
-        self.menu.add.button('Weiter').set_onselect(self.mvc.show_connect_menu)
+        self.menu.add.button('Weiter').set_onselect(self.mvc.run_socket_server)
 
         self.menu.mainloop(self.screen)
 
-    def draw_connect_player(self, is_host, ip, public_ip):
+    def draw_connect_player(self, is_host, ip, public_ip, label_text):
         self.reset_menu()
         if is_host:
-            self.menu.add.label(f'Deine öffentlich. IP: {public_ip}')
-            self.menu.add.label(f'Deine lokale Netzwerk-IP: {ip}')
-            self.menu.add.label('Teile diese IP deinem Spielpartner mit')
-            self.menu.add.label('Warte auf Verbindung')
+            self.menu.add.label(f'Deine öffentliche IP: {public_ip}')
+            self.menu.add.label(f'Deine private IP: {ip}')
+            self.menu.add.label('Teile IP deinem Spielpartner mit')
+            self.menu.add.label(label_text)
         else:
             self.menu.add.text_input('Bitte IP des Spielleiters eingeben: ', default='127.0.0.1',
                                      onchange=self.mvc.set_temp_server_ip)
@@ -34,7 +34,6 @@ class MenuView:
 
     def draw_pre_game(self):
         self.reset_menu()
-
 
     def reset_menu(self):
         self.menu.close()

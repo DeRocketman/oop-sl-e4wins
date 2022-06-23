@@ -31,7 +31,7 @@ class SocketClient:
     def receive(self):
         while True:
             msg_decoded = self.client.recv(512).decode('utf-8')
-            print('socket_client resceived_msg: ', msg_decoded)
+            print('socket_client received_msg: ', msg_decoded)
             if msg_decoded == 'host-connected' or 'player-joined':
                 self.menu_view_controller.received_msg(msg_decoded)
             elif msg_decoded[0:9] == 'username:':

@@ -11,7 +11,6 @@ class SocketClient:
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_ip = 'localhost'
         self.port = gs.SERVERPORT
-        self.send_msg_thread = threading.Thread(target=self.send)
         self.receive_msg_thread = threading.Thread(target=self.receive)
 
     def connect(self):
@@ -20,20 +19,25 @@ class SocketClient:
             self.menu_view_controller.received_msg(self.client.recv(512).decode('utf-8'))
             self.receive_msg_thread.start()
         except socket.error as e:
-            print('Error in message ', e)
+            print('[SocketClient-Info] Error in message ', e)
 
     def send(self, msg):
         try:
             self.client.sendall(str.encode(msg))
+            print('[SocketClient-Info] send MSG: ', msg)
         except socket.error as e:
             print('Error in message ', e)
 
     def receive(self):
         while True:
             msg_decoded = self.client.recv(512).decode('utf-8')
-            print('socket_client received_msg: ', msg_decoded)
+            print('[SocketClient-Info] resveived MSG: ', msg_decoded )
             if msg_decoded == 'host-connected' or 'player-joined':
                 self.menu_view_controller.received_msg(msg_decoded)
             elif msg_decoded[0:9] == 'username:':
+                keyword = msg_decoded[0:9]
+                restword = msg_decoded[9:]
+                print('keyword:', keyword)
+                print('restword:', restword)
                 print(msg_decoded[0:9])
-                self.menu_view_controller.received_msg(msg_decoded[9:])
+                self.menu_view_controller.received_msg(restword)

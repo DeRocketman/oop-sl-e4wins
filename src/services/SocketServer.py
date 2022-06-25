@@ -26,11 +26,11 @@ class SocketServer:
     def threaded_client(self, client):
         if len(self.client_list) == 1:
             client.send(str.encode('host-connected'))
-            print('host-connected')
+            print('[Server-Info] host-connected')
         else:
             for stored_client in self.client_list:
                 stored_client.send(str.encode('player-joined'))
-                print("player-joined")
+                print("[Server-Info] player-joined")
 
         while True:
             try:
@@ -38,15 +38,14 @@ class SocketServer:
                 reply = msg.decode('utf-8')
 
                 if msg:
-                    print('Message on Server:')
-                    print('Received: ', reply)
-                    print('Sending to all', reply)
+                    print('[Server-Info] Received: ', reply)
+                    print('[Server-Info] Sending to all', reply)
                 # send to both player
                 for player in self.client_list:
                     player.sendall(str.encode(reply))
 
             except socket.error as e:
-                print('Error in message ', e)
+                print('[Server-Info] Error in message ', e)
                 break
 
     def build_connection(self):

@@ -62,6 +62,8 @@ class MenuViewController:
     def start_game(self):
         if self.opponent.username != '':
             print('lets start the game')
+            print('this player: ', self.player.username)
+            print('opponent player: ', self.opponent.username)
 
     def received_msg(self, msg):
         print(msg)

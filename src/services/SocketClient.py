@@ -39,12 +39,11 @@ class SocketClient:
                     self.menu_view_controller.show_connect_menu(True)
                 elif msg_decoded == 'player-joined':
                     self.menu_view_controller.introduce_to_opponent()
+                    self.menu_view_controller.start_game()
                 elif msg_decoded[0:9] == 'username:':
-                    keyword = msg_decoded[0:9]
                     restword = msg_decoded[9:]
-                    print('keyword:', keyword)
-                    print('restword:', restword)
-                    print(msg_decoded[0:9])
+                    self.menu_view_controller.set_opponent_name(restword)
+
         else:
             print('Keine Messages')
         msg_list.clear()

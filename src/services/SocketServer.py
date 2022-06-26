@@ -31,7 +31,6 @@ class SocketServer:
             for stored_client in self.client_list:
                 stored_client.send(str.encode('player-joined'))
                 print("[Server-Info] player-joined")
-
         while True:
             try:
                 msg = client.recv(512)
@@ -40,9 +39,14 @@ class SocketServer:
                 if msg:
                     print('[Server-Info] Received: ', reply)
                     print('[Server-Info] Sending to all', reply)
-                # send to both player
-                for player in self.client_list:
-                    player.send(msg)
+
+                if reply == 'standby':
+                    for var in reply:
+                        client.send(str.encode(var+'\n'))
+                else:
+                    # send to both player
+                    for player in self.client_list:
+                        player.send(msg)
 
             except socket.error as e:
                 print('[Server-Info] Error in message ', e)

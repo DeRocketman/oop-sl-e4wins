@@ -3,6 +3,7 @@ import sys
 import pygame
 from requests import get
 
+from controller.GameViewController import GameController
 from model.Player import Player
 from services.SocketClient import SocketClient
 from services.SocketServer import SocketServer
@@ -21,6 +22,7 @@ class NewMenuViewController:
         self.ip_public = get('https://api.ipify.org').content.decode('utf8')
         self.temp_server_ip = ''
         self.current_menu = self.menu_view.initial_menu
+        self.game_is_run = False
 
     def set_username(self, value):
         self.player.username = value
@@ -66,9 +68,14 @@ class NewMenuViewController:
     def i_am_alive():
         print('i am alive')
 
+    def start_game(self):
+        gc = GameController(self.socket_client, self.socket_server, self.player, self.opponent)
+        self.game_is_run = True
+        self.socket_client.game_view_controller = gc
+        gc.play_game()
+
     def menu_loop(self):
-        start_game = False
-        while not start_game:
+        while not self.game_is_run:
             events = pygame.event.get()
             for event in events:
                 if event.type == pygame.QUIT:

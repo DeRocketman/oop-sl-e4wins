@@ -11,9 +11,13 @@ from view.PitchView import PitchView
 
 class GameController:
 
-    def __init__(self):
+    def __init__(self, socket_client, socket_server, player, opponent):
         pygame.init()
         self.pitch_view = PitchView(self.build_pitch(gs.ROW, gs.COLUMN))
+        self.socket_client = socket_client
+        self.socket_server = socket_server
+        self.player = player
+        self.opponent = opponent
 
     @staticmethod
     def build_pitch(row, column):

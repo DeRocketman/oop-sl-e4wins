@@ -19,7 +19,8 @@ class SocketClient:
             # self.menu_view_controller.received_msg(self.socket.recv(512).decode('utf-8'))
             self.is_connected = True
         except socket.error as e:
-            self.menu_view_controller.show_connect_menu(False)
+            if self.menu_view_controller.player.is_host:
+                self.menu_view_controller.show_connect_menu(False)
             print('[SocketClient-Info] Error in message ', e)
 
     def send(self, msg):

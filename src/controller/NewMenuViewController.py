@@ -77,15 +77,11 @@ class NewMenuViewController:
                     pygame.quit()
                     sys.exit()
             if self.socket_client.is_connected:
-                print('vor receive')
                 self.socket_client.receive()
-                print('nach receive')
             self.current_menu.draw(self.menu_view.screen)
-            print('nach draw')
             self.current_menu.update(events)
-            print('nachupdate')
             pygame.display.flip()
-            print('nach flip')
+            print('unten angekommen')
 
 
 if __name__ == '__main__':

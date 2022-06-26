@@ -1,5 +1,3 @@
-from _thread import start_new_thread
-
 import pygame
 from requests import get
 from model.Player import Player
@@ -13,6 +11,7 @@ class MenuViewController:
         pygame.init()
         self.player = Player()
         self.opponent = Player()
+        self.opponent.username = ''
         self.menu_view = MenuView(self)
         self.socket_client = SocketClient(self)
         self.socket_server = SocketServer()
@@ -33,14 +32,13 @@ class MenuViewController:
         self.temp_server_ip = value
 
     def show_menu(self):
-        self.menu_view.draw_username_input()
+        self.menu_view.draw_username_input_view()
 
     def run_socket_server(self):
         if self.player.is_host:
             self.socket_server.run_server()
             self.socket_client.server_ip = self.socket_server.ip
             self.socket_client.connect()
-
         else:
             self.menu_view.draw_connect_player(self.player.is_host, self.socket_server.ip, self.ip_public, '')
 
@@ -57,7 +55,7 @@ class MenuViewController:
         self.socket_client.connect()
 
     def introduce_to_opponent(self):
-        self.socket_client.send('username:'+self.player.username)
+        self.socket_client.send('username:' + self.player.username)
 
     def start_game(self):
         if self.opponent.username != '':
@@ -66,13 +64,18 @@ class MenuViewController:
             print('opponent player: ', self.opponent.username)
 
     def received_msg(self, msg):
-        print(msg)
+        print('MVC received MSG:', msg)
         if msg == 'host-connected':
+            self.socket_client.send("Hallo Max, i bims 1 Nachricht vong 1 Computerprogramm")
             self.show_connect_menu(True)
+            self.socket_client.send("Hallo Max, i bims 2 Nachricht vong 1 Computerprogramm")
         elif msg == 'player-joined':
             self.introduce_to_opponent()
-        else:
-            self.set_opponent_name(msg)
+        elif msg[0:9] == 'username:':
+            keyword = msg[0:9]
+            restword = msg[9:]
+            print(keyword)
+            self.set_opponent_name(restword)
             self.start_game()
 
 

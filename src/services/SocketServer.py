@@ -35,14 +35,14 @@ class SocketServer:
         while True:
             try:
                 msg = client.recv(512)
-                reply = msg.decode('utf-8')
+                reply = msg.decode('utf-8').splitlines()
 
                 if msg:
                     print('[Server-Info] Received: ', reply)
                     print('[Server-Info] Sending to all', reply)
                 # send to both player
                 for player in self.client_list:
-                    player.sendall(str.encode(reply))
+                    player.send(msg)
 
             except socket.error as e:
                 print('[Server-Info] Error in message ', e)

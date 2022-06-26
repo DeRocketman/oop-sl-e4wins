@@ -1,6 +1,4 @@
 import sys
-import threading
-from _thread import start_new_thread
 
 import pygame
 from requests import get
@@ -53,9 +51,8 @@ class NewMenuViewController:
             label_text = 'Alles IO, warte auf Verbindung'
         else:
             label_text = 'Ups, da lief etwas schief\nbitte neustarten'
-        self.menu_view.draw_wait_for_connection_menu(label_text)
+        self.menu_view.draw_wait_for_connection_menu(label_text, self.ip_public, self.socket_client.server_ip)
         self.current_menu = self.menu_view.wait_for_connection_menu
-
 
     def introduce_to_opponent(self):
         self.socket_client.send('username:' + self.player.username)
@@ -65,7 +62,8 @@ class NewMenuViewController:
         self.socket_client.server_ip = self.socket_server.ip
         self.socket_client.connect()
 
-    def i_am_alive(self):
+    @staticmethod
+    def i_am_alive():
         print('i am alive')
 
     def menu_loop(self):
@@ -77,11 +75,11 @@ class NewMenuViewController:
                     pygame.quit()
                     sys.exit()
             if self.socket_client.is_connected:
+                self.socket_client.send('standby')
                 self.socket_client.receive()
             self.current_menu.draw(self.menu_view.screen)
             self.current_menu.update(events)
             pygame.display.flip()
-            print('unten angekommen')
 
 
 if __name__ == '__main__':

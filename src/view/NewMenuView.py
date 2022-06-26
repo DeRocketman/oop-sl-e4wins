@@ -38,10 +38,10 @@ class MenuView:
                                        onchange=self.mvc.set_is_player_host)
         self.initial_menu.add.button('Weiter', self.mvc.show_next_menu)
 
-    def draw_wait_for_connection_menu(self, success):
+    def draw_wait_for_connection_menu(self, success, public_ip, ip):
         self.wait_for_connection_menu.add.button('Nur so', self.mvc.i_am_alive)
-        self.wait_for_connection_menu.add.label(f'Deine öffentliche IP:')
-        self.wait_for_connection_menu.add.label(f'Deine private IP: ')
+        self.wait_for_connection_menu.add.label(f'Deine öffentliche IP: {public_ip}')
+        self.wait_for_connection_menu.add.label(f'Deine private IP: {ip}')
         self.wait_for_connection_menu.add.label('Teile IP deinem Spielpartner mit')
         self.wait_for_connection_menu.add.label(success)
 

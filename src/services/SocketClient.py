@@ -6,7 +6,6 @@ from services.GameSettings import GameSettings as gs
 class SocketClient:
     def __init__(self, menu_view_controller):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.setblocking(False)
         self.server_ip = 'localhost'
         self.menu_view_controller = menu_view_controller
         self.game_view_controller = None

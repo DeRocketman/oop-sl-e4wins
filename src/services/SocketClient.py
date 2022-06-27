@@ -46,4 +46,11 @@ class SocketClient:
                     elif msg_decoded[0:9] == 'username:':
                         restword = msg_decoded[9:]
                         self.menu_view_controller.set_opponent_name(restword)
+                    elif msg_decoded[0:13] == 'MOUSE_MOTION:':
+                        pos_x = msg_decoded[13:]
+                        self.game_view_controller.mouse_motion(int(pos_x))
+                    elif msg_decoded[0:12] == 'MOUSE_CLICK:':
+                        pos_x = msg_decoded[12:]
+                        self.game_view_controller.mouse_click(int(pos_x))
+
         msg_list.clear()

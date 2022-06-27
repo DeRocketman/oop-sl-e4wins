@@ -18,7 +18,9 @@ class GameController:
         self.socket_server = socket_server
         self.player = player
         self.opponent = opponent
-        self.currentPlayer = self.set_starting_player()
+        self.current_player = self.set_starting_player()
+        self.current_player_number = 1
+        self.game_over = False
 
     @staticmethod
     def build_pitch(row, column):
@@ -42,10 +44,10 @@ class GameController:
         print(np.flip(self.pitch_view.pitch, 0))
 
     def switch_player(self, current_player):
-        if self.currentPlayer == self.player:
-            self.currentPlayer = self.opponent
+        if self.current_player == self.player:
+            self.current_player = self.opponent
         else:
-            self.currentPlayer = self.player
+            self.current_player = self.player
 
         if current_player == 1:
             return 2
@@ -83,11 +85,23 @@ class GameController:
                         self.pitch_view.pitch[row - 3][col + 3] == coin:
                     return True
 
-    def mouse_motion(self, pos):
-        pass
+    def mouse_motion(self, pos_x):
+        self.pitch_view.draw_coin(pos_x, self.current_player_number)
 
-    def mouse_click(self, pos):
-        pass
+    def mouse_click(self, pos_x):
+        pygame.draw.rect(self.pitch_view.screen, gs.EMPTY_SLOT_COLOR, (0, 0, gs.WIDTH, gs.ELEMENT_SIZE))
+        col = int(math.floor(pos_x / gs.ELEMENT_SIZE))
+        row = self.get_next_open_row(col)
+
+        if self.is_valid_move(col):
+            self.throw_coin(row, col, self.current_player_number)
+            self.print_board_for_look()
+            if self.check_win(self.current_player_number):
+                self.pitch_view.draw_win(self.current_player.username)
+                self.pitch_view.draw_pitch()
+                self.game_over = True
+
+            self.current_player_number = self.switch_player(self.current_player_number)
 
     def set_starting_player(self):
         if self.player.is_host:
@@ -96,38 +110,24 @@ class GameController:
             return self.opponent
 
     def play_game(self):
-        game_over = False
-        current_player = 1
 
-        while not game_over:
+        while not self.game_over:
             self.socket_client.send('standby')
             self.socket_client.receive()
-            print(self.opponent.username)
             self.pitch_view.draw_pitch()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
 
-                if event.type == pygame.MOUSEMOTION:
-                    pos_x = event.pos[0]
-                    self.pitch_view.draw_coin(pos_x, current_player)
+                if self.current_player == self.player:
+                    if event.type == pygame.MOUSEMOTION:
+                        pos_x = event.pos[0]
+                        self.socket_client.send('MOUSE_MOTION:' + str(pos_x))
 
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    pygame.draw.rect(self.pitch_view.screen, gs.EMPTY_SLOT_COLOR, (0, 0, gs.WIDTH, gs.ELEMENT_SIZE))
-                    pos_x = event.pos[0]
-                    col = int(math.floor(pos_x / gs.ELEMENT_SIZE))
-                    row = self.get_next_open_row(col)
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        pos_x = event.pos[0]
+                        self.socket_client.send('MOUSE_CLICK:' + str(pos_x))
 
-                    if self.is_valid_move(col):
-                        self.throw_coin(row, col, current_player)
-                        self.print_board_for_look()
-                        if self.check_win(current_player):
-                            self.pitch_view.draw_win(current_player)
-                            self.pitch_view.draw_pitch()
-                            game_over = True
-
-                        current_player = self.switch_player(current_player)
-
-            if game_over:
-                pygame.time.wait(3000)
+            if self.game_over:
+                pygame.time.wait(5000)

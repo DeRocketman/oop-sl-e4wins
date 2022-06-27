@@ -97,7 +97,7 @@ class GameController:
             self.throw_coin(row, col, self.current_player_number)
             self.print_board_for_look()
             if self.check_win(self.current_player_number):
-                self.pitch_view.draw_win(self.current_player.username)
+                self.pitch_view.draw_win(self.current_player_number, self.current_player.username)
                 self.pitch_view.draw_pitch()
                 self.game_over = True
 

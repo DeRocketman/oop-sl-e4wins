@@ -15,7 +15,6 @@ class SocketClient:
     def connect(self):
         try:
             self.socket.connect((self.server_ip, self.port))
-            # self.menu_view_controller.received_msg(self.socket.recv(512).decode('utf-8'))
             self.is_connected = True
         except socket.error as e:
             if self.menu_view_controller.player.is_host:

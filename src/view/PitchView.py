@@ -52,13 +52,13 @@ class PitchView:
             int(col * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE / 2),
             gs.HEIGHT - int(row * gs.ELEMENT_SIZE + gs.ELEMENT_SIZE / 2)), gs.RADIUS)
 
-    def draw_win(self, current_player):
+    def draw_win(self, current_player, winner_name):
         my_font = pygame.font.SysFont("monospace", 75)
         if current_player == 1:
-            label = my_font.render("Spieler 1 gewinnt!!!111elf!", True, gs.PLAYER_ONE_COLOR)
-            print("PlayerOne wins")
+            label = my_font.render(winner_name, True, gs.PLAYER_ONE_COLOR)
+            print(winner_name)
         else:
-            label = my_font.render("Spieler 2 gewinnt!!!!", True, gs.PLAYER_TWO_COLOR)
-            print("PlayerTwo wins")
+            label = my_font.render(winner_name, True, gs.PLAYER_TWO_COLOR)
+            print(winner_name)
         self.screen.blit(label, (40, 10))
         

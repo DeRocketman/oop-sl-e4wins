@@ -53,11 +53,11 @@ class NewMenuViewController:
             label_text = 'Alles IO, warte auf Verbindung'
         else:
             label_text = 'Ups, da lief etwas schief\nbitte neustarten'
-        self.menu_view.draw_wait_for_connection_menu(label_text, self.ip_public, self.socket_client.server_ip)
+        self.menu_view.draw_wait_for_connection_menu(label_text)
         self.current_menu = self.menu_view.wait_for_connection_menu
 
     def introduce_to_opponent(self):
-        self.socket_client.send('username:' + self.player.username)
+        self.socket_client.send('username:' + self.player.username + '\n')
 
     def run_socket_server(self):
         self.socket_server.run_server()

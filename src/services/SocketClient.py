@@ -26,7 +26,7 @@ class SocketClient:
         try:
             if msg:
                 self.socket.send(str.encode(msg + '\n'))
-                print('[SocketClient-Info] send MSG: ', msg)
+                # print('[SocketClient-Info] send MSG: ', msg)
         except socket.error as e:
             print('Error in message ', e)
 
@@ -34,15 +34,18 @@ class SocketClient:
         msg_list = self.socket.recv(512).decode('utf-8').splitlines()
         if len(msg_list) > 0:
             for msg_decoded in msg_list:
-                print('[SocketClient-Info] resveived MSG: ', msg_decoded)
-                if msg_decoded == 'host-connected':
-                    self.menu_view_controller.show_connect_menu(True)
-                elif msg_decoded == 'player-joined':
-                    self.menu_view_controller.introduce_to_opponent()
-                    self.menu_view_controller.start_game()
-                elif msg_decoded[0:9] == 'username:':
-                    restword = msg_decoded[9:]
-                    self.menu_view_controller.set_opponent_name(restword)
+                if msg_decoded == 'standby':
+                    pass
+                else:
+                    print('[SocketClient-Info] resveived MSG: ', msg_decoded)
+                    if msg_decoded == 'host-connected':
+                        self.menu_view_controller.show_connect_menu(True)
+                    elif msg_decoded == 'player-joined':
+                        self.menu_view_controller.introduce_to_opponent()
+                        self.menu_view_controller.start_game()
+                    elif msg_decoded[0:9] == 'username:':
+                        restword = msg_decoded[9:]
+                        self.menu_view_controller.set_opponent_name(restword)
 
         else:
             print('Keine Messages')

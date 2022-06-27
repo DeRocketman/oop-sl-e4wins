@@ -25,11 +25,11 @@ class SocketServer:
 
     def threaded_client(self, client):
         if len(self.client_list) == 1:
-            client.send(str.encode('host-connected'))
+            client.send(str.encode('host-connected'+'\n'))
             print('[Server-Info] host-connected')
         else:
             for stored_client in self.client_list:
-                stored_client.send(str.encode('player-joined'))
+                stored_client.send(str.encode('player-joined' + '\n'))
                 print("[Server-Info] player-joined")
         while True:
             try:
@@ -37,8 +37,9 @@ class SocketServer:
                 reply = msg.decode('utf-8').splitlines()
 
                 if msg:
-                    print('[Server-Info] Received: ', reply)
-                    print('[Server-Info] Sending to all', reply)
+                   # print('[Server-Info] Received: ', reply)
+                   # print('[Server-Info] Sending to all', reply)
+                    pass
 
                 if reply == 'standby':
                     for var in reply:

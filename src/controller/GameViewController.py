@@ -18,6 +18,7 @@ class GameController:
         self.socket_server = socket_server
         self.player = player
         self.opponent = opponent
+        self.currentPlayer = self.set_starting_player()
 
     @staticmethod
     def build_pitch(row, column):
@@ -40,8 +41,12 @@ class GameController:
     def print_board_for_look(self):
         print(np.flip(self.pitch_view.pitch, 0))
 
-    @staticmethod
-    def switch_player(current_player):
+    def switch_player(self, current_player):
+        if self.currentPlayer == self.player:
+            self.currentPlayer = self.opponent
+        else:
+            self.currentPlayer = self.player
+
         if current_player == 1:
             return 2
         else:
@@ -62,7 +67,7 @@ class GameController:
                         self.pitch_view.pitch[row + 2][col] == coin and self.pitch_view.pitch[row + 3][col] == coin:
                     return True
 
-        # Check positively sloped diaganols
+        # Check positively sloped diagonals
         for col in range(gs.COLUMN - 3):
             for row in range(gs.ROW - 3):
                 if self.pitch_view.pitch[row][col] == coin and self.pitch_view.pitch[row + 1][col + 1] == coin and \
@@ -70,7 +75,7 @@ class GameController:
                         self.pitch_view.pitch[row + 3][col + 3] == coin:
                     return True
 
-        # Check negatively sloped diaganols
+        # Check negatively sloped diagonals
         for col in range(gs.COLUMN - 3):
             for row in range(3, gs.ROW):
                 if self.pitch_view.pitch[row][col] == coin and self.pitch_view.pitch[row - 1][col + 1] == coin and \
@@ -78,11 +83,26 @@ class GameController:
                         self.pitch_view.pitch[row - 3][col + 3] == coin:
                     return True
 
+    def mouse_motion(self, pos):
+        pass
+
+    def mouse_click(self, pos):
+        pass
+
+    def set_starting_player(self):
+        if self.player.is_host:
+            return self.player
+        else:
+            return self.opponent
+
     def play_game(self):
         game_over = False
         current_player = 1
 
         while not game_over:
+            self.socket_client.send('standby')
+            self.socket_client.receive()
+            print(self.opponent.username)
             self.pitch_view.draw_pitch()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -111,8 +131,3 @@ class GameController:
 
             if game_over:
                 pygame.time.wait(3000)
-
-
-if __name__ == '__main__':
-    gc = GameController()
-    gc.play_game()

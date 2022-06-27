@@ -37,7 +37,7 @@ class SocketClient:
                 if msg_decoded == 'standby':
                     pass
                 else:
-                    print('[SocketClient-Info] resveived MSG: ', msg_decoded)
+                    print('[SocketClient-Info] received MSG: ', msg_decoded)
                     if msg_decoded == 'host-connected':
                         self.menu_view_controller.show_connect_menu(True)
                     elif msg_decoded == 'player-joined':
@@ -46,7 +46,4 @@ class SocketClient:
                     elif msg_decoded[0:9] == 'username:':
                         restword = msg_decoded[9:]
                         self.menu_view_controller.set_opponent_name(restword)
-
-        else:
-            print('Keine Messages')
         msg_list.clear()

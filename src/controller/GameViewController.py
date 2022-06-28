@@ -110,8 +110,9 @@ class GameController:
             return self.opponent
 
     def play_game(self):
-
+        clock = pygame.time.Clock()
         while not self.game_over:
+            clock.tick(gs.FPS)
             self.socket_client.send('standby')
             self.socket_client.receive()
             self.pitch_view.draw_pitch()

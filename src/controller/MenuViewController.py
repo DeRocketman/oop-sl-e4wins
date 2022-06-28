@@ -3,11 +3,12 @@ import sys
 import pygame
 from requests import get
 
+from services.GameSettings import GameSettings as gs
 from controller.GameViewController import GameController
 from model.Player import Player
 from services.SocketClient import SocketClient
 from services.SocketServer import SocketServer
-from view.NewMenuView import MenuView
+from view.MenuView import MenuView
 
 
 class NewMenuViewController:
@@ -29,6 +30,7 @@ class NewMenuViewController:
 
     def set_is_player_host(self, value, is_player_host):
         self.player.is_host = value
+        self.player.is_host = is_player_host
 
     def set_temp_server_ip(self, value):
         self.temp_server_ip = value
@@ -64,10 +66,6 @@ class NewMenuViewController:
         self.socket_client.server_ip = self.socket_server.ip
         self.socket_client.connect()
 
-    @staticmethod
-    def i_am_alive():
-        print('i am alive')
-
     def start_game(self):
         gc = GameController(self.socket_client, self.socket_server, self.player, self.opponent)
         self.game_is_run = True
@@ -75,7 +73,9 @@ class NewMenuViewController:
         gc.play_game()
 
     def menu_loop(self):
+        clock = pygame.time.Clock()
         while not self.game_is_run:
+            clock.tick(gs.FPS)
             events = pygame.event.get()
             for event in events:
                 if event.type == pygame.QUIT:

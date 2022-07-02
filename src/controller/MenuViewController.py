@@ -11,7 +11,7 @@ from services.SocketServer import SocketServer
 from view.MenuView import MenuView
 
 
-class NewMenuViewController:
+class MenuViewController:
     def __init__(self):
         pygame.init()
         self.player = Player()
@@ -103,8 +103,3 @@ class NewMenuViewController:
                 pygame.time.wait(500)
         pygame.quit()
         sys.exit()
-
-
-if __name__ == '__main__':
-    mvc = NewMenuViewController()
-    mvc.menu_loop()

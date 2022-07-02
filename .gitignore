@@ -3,3 +3,14 @@
 /.idea/modules.xml
 /.idea/oop-sl-e4wins.iml
 /.idea/vcs.xml
+/out/production/oop-sl-e4wins/controller/GameViewController.py
+/out/production/oop-sl-e4wins/view/example.py
+/out/production/oop-sl-e4wins/services/GameSettings.py
+/out/production/oop-sl-e4wins/view/MenuView.py
+/out/production/oop-sl-e4wins/controller/MenuViewController.py
+/out/production/oop-sl-e4wins/services/Message.py
+/out/production/oop-sl-e4wins/services/MessageType.py
+/out/production/oop-sl-e4wins/view/PitchView.py
+/out/production/oop-sl-e4wins/model/Player.py
+/out/production/oop-sl-e4wins/services/SocketClient.py
+/out/production/oop-sl-e4wins/services/SocketServer.py

@@ -8,7 +8,7 @@ class SocketServer:
     def __init__(self):
         self.ip = socket.gethostbyname(socket.gethostname())
         print('Server ', self.ip)
-        self.port = gs.SERVERPORT
+        self.port = gs.SERVER_PORT
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_list = []
         self.message_list = {}
@@ -25,36 +25,47 @@ class SocketServer:
 
     def threaded_client(self, client):
         if len(self.client_list) == 1:
-            client.send(str.encode('host-connected'+'\n'))
+            client.send(str.encode('host-connected\n'))
             print('[Server-Info] host-connected')
         else:
             for stored_client in self.client_list:
-                stored_client.send(str.encode('player-joined' + '\n'))
+                stored_client.send(str.encode(f'player-joined\n'))
                 print("[Server-Info] player-joined")
         while True:
             try:
                 msg = client.recv(512)
-                reply = msg.decode('utf-8').splitlines()
+                reply_list = msg.decode('utf-8').splitlines()
 
-                if msg:
-                   # print('[Server-Info] Received: ', reply)
-                   # print('[Server-Info] Sending to all', reply)
-                    pass
-
-                if reply == 'standby':
-                    for var in reply:
-                        client.send(str.encode(var+'\n'))
-                else:
-                    # send to both player
-                    for player in self.client_list:
-                        player.send(msg)
+                if len(reply_list) > 0:
+                    for reply in reply_list:
+                        if msg:
+                            # print(f'[Server-Info] Received: {reply}')
+                            # print(f'[Server-Info] Sending to all: {reply}')
+                            pass
+                        if reply == 'standby':
+                            client.send(str.encode(f'{reply}\n'))
+                        elif reply == 'game_over':
+                            break
+                        else:
+                            # send to both player
+                            for player in self.client_list:
+                                player.send(msg)
 
             except socket.error as e:
-                print('[Server-Info] Error in message ', e)
+                # print(f'[Server-Info] Error in message: {e}')
                 break
+        print('[Server-Info] Connection Closed')
+        self.close_connection(client)
 
     def build_connection(self):
         while True:
-            client, addr = self.socket.accept()
-            self.client_list.append(client)
-            start_new_thread(self.threaded_client, (client,))
+            try:
+                client, addr = self.socket.accept()
+                self.client_list.append(client)
+                start_new_thread(self.threaded_client, (client,))
+            except socket.error as e:
+                print(f'[Server-Info] Error in message {e}')
+
+    def close_connection(self, client):
+        client.close()
+        self.client_list.remove(client)

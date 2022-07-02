@@ -11,8 +11,10 @@ from view.PitchView import PitchView
 
 class GameController:
 
-    def __init__(self, socket_client, socket_server, player, opponent):
+    def __init__(self, socket_client, socket_server, player, opponent, mvc, menu_view):
         pygame.init()
+        self.mvc = mvc
+        self.menu_view = menu_view
         self.pitch_view = PitchView(self.build_pitch(gs.ROW, gs.COLUMN))
         self.socket_client = socket_client
         self.socket_server = socket_server
@@ -124,11 +126,16 @@ class GameController:
                 if self.current_player == self.player:
                     if event.type == pygame.MOUSEMOTION:
                         pos_x = event.pos[0]
-                        self.socket_client.send('MOUSE_MOTION:' + str(pos_x))
+                        self.socket_client.send(f'MOUSE_MOTION:{str(pos_x)}')
 
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         pos_x = event.pos[0]
-                        self.socket_client.send('MOUSE_CLICK:' + str(pos_x))
+                        self.socket_client.send(f'MOUSE_CLICK:{str(pos_x)}')
+                        break
 
             if self.game_over:
                 pygame.time.wait(5000)
+
+                self.mvc.current_menu = self.menu_view.after_game_menu
+                self.menu_view.draw_after_game_menu()
+                self.mvc.game_is_run = False

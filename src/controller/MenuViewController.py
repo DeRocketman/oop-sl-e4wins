@@ -24,6 +24,7 @@ class NewMenuViewController:
         self.temp_server_ip = ''
         self.current_menu = self.menu_view.initial_menu
         self.game_is_run = False
+        self.game_over = False
 
     def set_username(self, value):
         self.player.username = value
@@ -59,7 +60,7 @@ class NewMenuViewController:
         self.current_menu = self.menu_view.wait_for_connection_menu
 
     def introduce_to_opponent(self):
-        self.socket_client.send('username:' + self.player.username + '\n')
+        self.socket_client.send(f'username:{self.player.username}\n')
 
     def run_socket_server(self):
         self.socket_server.run_server()
@@ -67,14 +68,14 @@ class NewMenuViewController:
         self.socket_client.connect()
 
     def start_game(self):
-        gc = GameController(self.socket_client, self.socket_server, self.player, self.opponent)
+        gc = GameController(self.socket_client, self.socket_server, self.player, self.opponent, self, self.menu_view)
         self.game_is_run = True
         self.socket_client.game_view_controller = gc
         gc.play_game()
 
     def menu_loop(self):
         clock = pygame.time.Clock()
-        while not self.game_is_run:
+        while not self.game_is_run or not self.game_over:
             clock.tick(gs.FPS)
             events = pygame.event.get()
             for event in events:
@@ -87,6 +88,21 @@ class NewMenuViewController:
             self.current_menu.draw(self.menu_view.screen)
             self.current_menu.update(events)
             pygame.display.flip()
+
+    def exit_game(self):
+        if self.socket_client.is_connected:
+            if self.player.is_host:
+                self.socket_client.send('host_disconnected')
+                self.socket_client.receive()
+                self.game_over = True
+                pygame.time.wait(500)
+            elif self.socket_client:
+                self.socket_client.send('opponent_disconnected')
+                self.socket_client.receive()
+                self.game_over = True
+                pygame.time.wait(500)
+        pygame.quit()
+        sys.exit()
 
 
 if __name__ == '__main__':

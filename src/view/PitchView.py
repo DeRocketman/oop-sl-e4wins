@@ -55,10 +55,10 @@ class PitchView:
     def draw_win(self, current_player, winner_name):
         my_font = pygame.font.SysFont("monospace", 75)
         if current_player == 1:
-            label = my_font.render(winner_name + ' gewinnt!', True, gs.PLAYER_ONE_COLOR)
+            label = my_font.render(f'{winner_name} gewinnt!', True, gs.PLAYER_ONE_COLOR)
             print(winner_name)
         else:
-            label = my_font.render(winner_name + ' gewinnt!', True, gs.PLAYER_TWO_COLOR)
+            label = my_font.render(f'{winner_name} gewinnt!', True, gs.PLAYER_TWO_COLOR)
             print(winner_name)
         self.screen.blit(label, (40, 10))
         

@@ -11,6 +11,7 @@ from services.SocketServer import SocketServer
 from view.MenuView import MenuView
 
 
+# Controller class for MenuView
 class MenuViewController:
     def __init__(self):
         pygame.init()
@@ -20,13 +21,15 @@ class MenuViewController:
         self.menu_view = MenuView(self)
         self.socket_client = SocketClient(self)
         self.socket_server = SocketServer()
-        self.ip_public = get('https://api.ipify.org').content.decode('utf8')
+        self.ip_public = get('https://api.ipify.org').content.decode('utf8')  # gets the own public ip from router
         self.temp_server_ip = ''
         self.current_menu = self.menu_view.initial_menu
         self.game_is_run = False
         self.game_over = False
 
     def set_username(self, value):
+        if not value:
+            self.player.username = 'unnamed'
         self.player.username = value
 
     def set_is_player_host(self, value, is_player_host):

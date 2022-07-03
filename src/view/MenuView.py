@@ -39,7 +39,7 @@ class MenuView:
         self.draw_initial_menu()
 
     def draw_initial_menu(self):
-        username_field = self.initial_menu.add.text_input('Benutzername: ', onchange=self.mvc.set_username)
+        username_field = self.initial_menu.add.text_input('Benutzername: ', onchange=self.mvc.set_username, maxchar=15)
         username_field.set_default_value(self.mvc.player.username)
         self.initial_menu.add.selector('Spiel leiten / teilnehmen: ', [('\tteilnehmen\t', False), ('\tleiten\t', True)],
                                        onchange=self.mvc.set_is_player_host)
@@ -54,7 +54,7 @@ class MenuView:
         self.wait_for_connection_menu.add.label(success)
 
     def draw_connect_to_host_menu(self):
-        self.connect_to_host_menu.add.text_input('Bitte IP des Spielleiters eingeben: ', default='127.0.0.1',
+        self.connect_to_host_menu.add.text_input('Bitte IP des Spielleiters eingeben: ', default='192.168.188.102',
                                                  onchange=self.mvc.set_temp_server_ip)
         self.connect_to_host_menu.add.button('Verbinden', self.mvc.connect_to_host)
 

@@ -29,7 +29,7 @@ class SocketClient:
         try:
             if msg:
                 self.socket.send(str.encode(f'{msg}\n'))
-                print(f'[SocketClient-Info] send MSG: {msg}')
+                # print(f'[SocketClient-Info] send MSG: {msg}')
         except socket.error as e:
             print('Error in message ', e)
 
@@ -63,4 +63,8 @@ class SocketClient:
                         self.send('game_over')
                         self.close_connection()
                         break
+                    elif msg_decoded == 'close':
+                        self.game_view_controller.close_game()
+                        break
+                msg_list.clear()
         msg_list.clear()

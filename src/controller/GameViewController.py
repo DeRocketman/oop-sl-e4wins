@@ -1,12 +1,11 @@
 import math
 import sys
 
-import numpy
 import numpy as np
 import pygame
 
 from services.GameSettings import GameSettings as gs
-from view.PitchView import PitchView
+from view.GameView import GameView
 
 
 class GameController:
@@ -15,7 +14,7 @@ class GameController:
         pygame.init()
         self.mvc = mvc
         self.menu_view = menu_view
-        self.pitch_view = PitchView(self.build_pitch(gs.ROW, gs.COLUMN))
+        self.game_view = GameView(self.build_pitch(gs.ROW, gs.COLUMN))
         self.socket_client = socket_client
         self.socket_server = socket_server
         self.player = player
@@ -26,24 +25,24 @@ class GameController:
 
     @staticmethod
     def build_pitch(row, column):
-        return numpy.zeros((row, column))
+        return np.zeros((row, column))
 
     def throw_coin(self, row, col, coin):
         print("DROPPIECE")
         print("ROW ", row, "COL ", col)
-        self.pitch_view.pitch[row][col] = coin
+        self.game_view.pitch[row][col] = coin
 
     def is_valid_move(self, col):
-        return self.pitch_view.pitch[gs.ROW - 1][col] == 0
+        return self.game_view.pitch[gs.ROW - 1][col] == 0
 
     def get_next_open_row(self, col):
         for row in range(gs.ROW):
-            if self.pitch_view.pitch[row][col] == 0:
+            if self.game_view.pitch[row][col] == 0:
                 print("Reihe: ", row)
                 return row
 
     def print_board_for_look(self):
-        print(np.flip(self.pitch_view.pitch, 0))
+        print(np.flip(self.game_view.pitch, 0))
 
     def switch_player(self, current_player):
         if self.current_player == self.player:
@@ -60,38 +59,38 @@ class GameController:
         # Check horizontal locations for win
         for col in range(gs.COLUMN - 3):
             for row in range(gs.ROW):
-                if self.pitch_view.pitch[row][col] == coin and self.pitch_view.pitch[row][col + 1] == coin and \
-                        self.pitch_view.pitch[row][col + 2] == coin and self.pitch_view.pitch[row][col + 3] == coin:
+                if self.game_view.pitch[row][col] == coin and self.game_view.pitch[row][col + 1] == coin and \
+                        self.game_view.pitch[row][col + 2] == coin and self.game_view.pitch[row][col + 3] == coin:
                     return True
 
         # Check vertical locations for win
         for col in range(gs.COLUMN):
             for row in range(gs.ROW - 3):
-                if self.pitch_view.pitch[row][col] == coin and self.pitch_view.pitch[row + 1][col] == coin and \
-                        self.pitch_view.pitch[row + 2][col] == coin and self.pitch_view.pitch[row + 3][col] == coin:
+                if self.game_view.pitch[row][col] == coin and self.game_view.pitch[row + 1][col] == coin and \
+                        self.game_view.pitch[row + 2][col] == coin and self.game_view.pitch[row + 3][col] == coin:
                     return True
 
         # Check positively sloped diagonals
         for col in range(gs.COLUMN - 3):
             for row in range(gs.ROW - 3):
-                if self.pitch_view.pitch[row][col] == coin and self.pitch_view.pitch[row + 1][col + 1] == coin and \
-                        self.pitch_view.pitch[row + 2][col + 2] == coin and \
-                        self.pitch_view.pitch[row + 3][col + 3] == coin:
+                if self.game_view.pitch[row][col] == coin and self.game_view.pitch[row + 1][col + 1] == coin and \
+                        self.game_view.pitch[row + 2][col + 2] == coin and \
+                        self.game_view.pitch[row + 3][col + 3] == coin:
                     return True
 
         # Check negatively sloped diagonals
         for col in range(gs.COLUMN - 3):
             for row in range(3, gs.ROW):
-                if self.pitch_view.pitch[row][col] == coin and self.pitch_view.pitch[row - 1][col + 1] == coin and \
-                        self.pitch_view.pitch[row - 2][col + 2] == coin and \
-                        self.pitch_view.pitch[row - 3][col + 3] == coin:
+                if self.game_view.pitch[row][col] == coin and self.game_view.pitch[row - 1][col + 1] == coin and \
+                        self.game_view.pitch[row - 2][col + 2] == coin and \
+                        self.game_view.pitch[row - 3][col + 3] == coin:
                     return True
 
     def mouse_motion(self, pos_x):
-        self.pitch_view.draw_coin(pos_x, self.current_player_number)
+        self.game_view.draw_coin(pos_x, self.current_player_number)
 
     def mouse_click(self, pos_x):
-        pygame.draw.rect(self.pitch_view.screen, gs.EMPTY_SLOT_COLOR, (0, 0, gs.WIDTH, gs.ELEMENT_SIZE))
+        pygame.draw.rect(self.game_view.screen, gs.EMPTY_SLOT_COLOR, (0, 0, gs.WIDTH, gs.ELEMENT_SIZE))
         col = int(math.floor(pos_x / gs.ELEMENT_SIZE))
         row = self.get_next_open_row(col)
 
@@ -99,8 +98,8 @@ class GameController:
             self.throw_coin(row, col, self.current_player_number)
             self.print_board_for_look()
             if self.check_win(self.current_player_number):
-                self.pitch_view.draw_win(self.current_player_number, self.current_player.username)
-                self.pitch_view.draw_pitch()
+                self.game_view.draw_win(self.current_player_number, self.current_player.username)
+                self.game_view.draw_pitch()
                 self.game_over = True
 
             self.current_player_number = self.switch_player(self.current_player_number)
@@ -111,17 +110,22 @@ class GameController:
         else:
             return self.opponent
 
+    def close_game(self):
+        self.game_view.draw_connection_lost()
+        pygame.time.wait(3000)
+        pygame.quit()
+        sys.exit()
+
     def play_game(self):
         clock = pygame.time.Clock()
         while not self.game_over:
             clock.tick(gs.FPS)
             self.socket_client.send('standby')
             self.socket_client.receive()
-            self.pitch_view.draw_pitch()
+            self.game_view.draw_pitch()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+                    self.socket_client.send('close')
 
                 if self.current_player == self.player:
                     if event.type == pygame.MOUSEMOTION:

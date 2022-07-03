@@ -1,4 +1,4 @@
-
+# Model-class for player-objects
 class Player:
     def __init__(self):
         self.username = 'Python Peter'

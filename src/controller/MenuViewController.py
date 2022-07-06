@@ -96,12 +96,15 @@ class MenuViewController:
             pygame.display.flip()
 
     def wait_for_restart(self):
-        self.socket_client.send('revenge')
+        if not self.player.revenge:
+            self.player.revenge = True
+            self.socket_client.send('revenge')
 
     def revenge_counter(self):
         self.revenge_count += 1
         if self.revenge_count == 2:
             self.revenge_count = 0
+            self.player.revenge = False
             self.start_game()
 
     def no_revenge(self):

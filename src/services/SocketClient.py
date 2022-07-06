@@ -66,5 +66,4 @@ class SocketClient:
                     elif msg_decoded == 'close':
                         self.game_view_controller.close_game()
                         break
-                msg_list.clear()
         msg_list.clear()

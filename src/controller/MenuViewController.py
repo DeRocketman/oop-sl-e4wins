@@ -26,11 +26,14 @@ class MenuViewController:
         self.current_menu = self.menu_view.initial_menu
         self.game_is_run = False
         self.game_over = False
+        self.revenge_count = 0
 
     def set_username(self, value):
         if not value:
             self.player.username = 'unnamed'
+            return 'unnamed'
         self.player.username = value
+        return value
 
     def set_is_player_host(self, value, is_player_host):
         self.player.is_host = value
@@ -91,6 +94,18 @@ class MenuViewController:
             self.current_menu.draw(self.menu_view.screen)
             self.current_menu.update(events)
             pygame.display.flip()
+
+    def wait_for_restart(self):
+        self.socket_client.send('revenge')
+
+    def revenge_counter(self):
+        self.revenge_count += 1
+        if self.revenge_count == 2:
+            self.revenge_count = 0
+            self.start_game()
+
+    def no_revenge(self):
+        self.socket_client.send('coward')
 
     def exit_game(self):
         if self.socket_client.is_connected:

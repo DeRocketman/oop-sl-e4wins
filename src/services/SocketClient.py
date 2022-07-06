@@ -55,6 +55,10 @@ class SocketClient:
                     elif msg_decoded[0:12] == 'MOUSE_CLICK:':
                         pos_x = msg_decoded[12:]
                         self.game_view_controller.mouse_click(int(pos_x))
+                    elif msg_decoded == 'revenge':
+                        self.menu_view_controller.revenge_counter()
+                    elif msg_decoded == 'coward':
+                        self.menu_view_controller.exit_game()
                     elif msg_decoded == 'host_disconnected':
                         self.send('game_over')
                         self.close_connection()
@@ -66,4 +70,5 @@ class SocketClient:
                     elif msg_decoded == 'close':
                         self.game_view_controller.close_game()
                         break
+
         msg_list.clear()

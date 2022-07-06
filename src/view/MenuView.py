@@ -37,6 +37,7 @@ class MenuView:
         )
 
         self.draw_initial_menu()
+        self.draw_after_game_menu()
 
     def draw_initial_menu(self):
         username_field = self.initial_menu.add.text_input('Benutzername: ', onchange=self.mvc.set_username, maxchar=15)
@@ -59,4 +60,5 @@ class MenuView:
         self.connect_to_host_menu.add.button('Verbinden', self.mvc.connect_to_host)
 
     def draw_after_game_menu(self):
-        self.after_game_menu.add.button('Beenden', self.mvc.exit_game)
+        self.after_game_menu.add.button('Nochmal', self.mvc.wait_for_restart)
+        self.after_game_menu.add.button('Beenden', self.mvc.no_revenge)

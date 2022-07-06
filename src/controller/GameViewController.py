@@ -138,7 +138,5 @@ class GameController:
 
             if self.game_over:
                 pygame.time.wait(5000)
-
                 self.mvc.current_menu = self.menu_view.after_game_menu
-                self.menu_view.draw_after_game_menu()
                 self.mvc.game_is_run = False

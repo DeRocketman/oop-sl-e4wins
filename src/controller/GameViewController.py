@@ -119,8 +119,6 @@ class GameController:
         clock = pygame.time.Clock()
         while not self.game_over:
             clock.tick(gs.FPS)
-            self.socket_client.send('standby')
-            self.socket_client.receive()
             self.game_view.draw_pitch()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -132,10 +130,13 @@ class GameController:
                         self.socket_client.send(f'MOUSE_MOTION:{str(pos_x)}')
 
                     if event.type == pygame.MOUSEBUTTONDOWN:
+                        pygame.time.wait(100)
                         pos_x = event.pos[0]
                         self.socket_client.send(f'MOUSE_CLICK:{str(pos_x)}')
                         break
 
+            self.socket_client.send('standby')
+            self.socket_client.receive()
             if self.game_over:
                 pygame.time.wait(5000)
                 self.mvc.current_menu = self.menu_view.after_game_menu

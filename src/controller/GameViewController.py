@@ -28,8 +28,7 @@ class GameController:
         return np.zeros((row, column))
 
     def throw_coin(self, row, col, coin):
-        print("DROPPIECE")
-        print("ROW ", row, "COL ", col)
+        print(f'ROW {row} COL {col}')
         self.game_view.pitch[row][col] = coin
 
     def is_valid_move(self, col):
@@ -38,7 +37,7 @@ class GameController:
     def get_next_open_row(self, col):
         for row in range(gs.ROW):
             if self.game_view.pitch[row][col] == 0:
-                print("Reihe: ", row)
+                print(f'Reihe:{row}')
                 return row
 
     def print_board_for_look(self):

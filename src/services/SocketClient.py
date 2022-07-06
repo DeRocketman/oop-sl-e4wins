@@ -29,7 +29,7 @@ class SocketClient:
         try:
             if msg:
                 self.socket.send(str.encode(f'{msg}\n'))
-                # print(f'[SocketClient-Info] send MSG: {msg}')
+                print(f'[SocketClient-Info] send MSG: {msg}')
         except socket.error as e:
             print('Error in message ', e)
 

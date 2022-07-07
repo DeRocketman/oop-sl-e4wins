@@ -25,7 +25,6 @@ class MenuViewController:
         self.temp_server_ip = ''
         self.current_menu = self.menu_view.initial_menu
         self.game_is_run = False
-        self.game_over = False
         self.revenge_count = 0
 
     def set_username(self, value):
@@ -81,7 +80,7 @@ class MenuViewController:
 
     def menu_loop(self):
         clock = pygame.time.Clock()
-        while not self.game_is_run or not self.game_over:
+        while not self.game_is_run:
             clock.tick(gs.FPS)
             events = pygame.event.get()
             for event in events:
@@ -117,7 +116,6 @@ class MenuViewController:
                 msg = 'host_disconnected'
             self.socket_client.send(f'{msg}')
             self.socket_client.receive()
-            self.game_over = True
             pygame.time.wait(500)
         pygame.quit()
         sys.exit()

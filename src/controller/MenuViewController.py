@@ -112,15 +112,12 @@ class MenuViewController:
 
     def exit_game(self):
         if self.socket_client.is_connected:
+            msg = 'opponent_disconnected'
             if self.player.is_host:
-                self.socket_client.send('host_disconnected')
-                self.socket_client.receive()
-                self.game_over = True
-                pygame.time.wait(500)
-            elif self.socket_client:
-                self.socket_client.send('opponent_disconnected')
-                self.socket_client.receive()
-                self.game_over = True
-                pygame.time.wait(500)
+                msg = 'host_disconnected'
+            self.socket_client.send(f'{msg}')
+            self.socket_client.receive()
+            self.game_over = True
+            pygame.time.wait(500)
         pygame.quit()
         sys.exit()

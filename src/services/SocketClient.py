@@ -62,13 +62,9 @@ class SocketClient:
                     elif msg_decoded == 'host_disconnected':
                         self.send('game_over')
                         self.close_connection()
-                        break
                     elif msg_decoded == 'opponent_disconnected':
                         self.send('game_over')
                         self.close_connection()
-                        break
                     elif msg_decoded == 'close':
                         self.game_view_controller.close_game()
-                        break
-
         msg_list.clear()

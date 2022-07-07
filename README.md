@@ -1,8 +1,8 @@
 # OOP SL SoSe 22 "e4Wins" 
 
 ## Autoren:
-- Maximilian Rupprecht - 318022
-- Dirk Stricker - 333036
+- Maximilian Rupprecht
+- Dirk Stricker
 
 ## Struktur
 
